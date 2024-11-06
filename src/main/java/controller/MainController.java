@@ -33,6 +33,8 @@ public class MainController implements Controller {
     @FXML
     VisualizationController visualizationController;
     @FXML
+    DistanceMeasurementController distanceMeasurementController;
+    @FXML
     Label status;
     private FXMLLoader loader;
     private MeasurementController measurementController;
@@ -175,5 +177,21 @@ public class MainController implements Controller {
         a.setHeaderText("IGT Prototyping Tool");
         a.setContentText("This application was and currently is developed by students of THU.\nIt is actively supervised by Prof. Dr. Alfred Franz.\nThe source code can be found at https://github.com/Alfred-Franz/IGTPrototypingTool");
         a.showAndWait();
+    }
+    @FXML
+    public void openDistanceMeasurementView(){
+        try {
+            setupFXMLLoader("DistanceMeasurementView");
+            Tab t = new Tab("Distance Measurement View", this.loader.load());
+            // set up connections between measurement and other parts of application
+            this.distanceMeasurementController = this.loader.getController();
+            this.distanceMeasurementController.injectStatusLabel(this.status);
+
+            this.tabPane.getTabs().add(t);
+            this.tabPane.getSelectionModel().select(t);
+            t.setOnCloseRequest(e -> this.distanceMeasurementController.close());
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, "Error loading Distance Measurement View", e);
+        }
     }
 }
